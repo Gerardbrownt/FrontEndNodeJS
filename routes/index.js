@@ -37,6 +37,22 @@ router.get('/photos/filter', async function(req, res, next) {
   }
 });
 
+router.get('/photos/search', function(req, res, next) {
+  res.render('fotos_search', { title: 'Search by ID' });
+});
+
+router.get('/photos/searchById', async function(req, res, next) {
+  try {
+    let { id } = req.query;
+    const URL = `http://localhost:3000/fotos/findById/${id}/json`;
+    const response = await axios.get(URL);
+    res.render('fotos_list', { title: 'Search Result', fotos: response.data });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al buscar foto');
+  }
+});
+
 router.get('/photos/edit/:id', async function(req, res, next) {
   try {
     const id = req.params.id;
